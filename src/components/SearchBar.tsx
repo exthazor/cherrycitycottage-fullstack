@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export const SearchBar = () => {
   const [startDate, setStartDate] = useState(dayjs().add(1, "days"));
-    const [endDate, setEndDate] = useState(dayjs().add(2, "days"));
+  const [endDate, setEndDate] = useState(dayjs().add(2, "days"));
   const [noOfGuests, setNoOfGuests] = useState(Number);
   const [noOfRooms, setNoOfRooms] = useState(Number);
   const [promoCode, setPromoCode] = useState("");

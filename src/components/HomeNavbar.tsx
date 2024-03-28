@@ -33,18 +33,18 @@ export function HomeNavbar() {
      setRooms(prev => increment ? prev + 1 : Math.max(1, prev - 1));
     };
     
-      const handleAdultsChange = (increment: boolean) => {
-        setAdults(prev => increment ? prev + 1 : Math.max(1, prev - 1));
+    const handleAdultsChange = (increment: boolean) => {
+      setAdults(prev => increment ? prev + 1 : Math.max(1, prev - 1));
     };
     
-      const updateOccupancy = () => {
-        setOccupancy(`${adults} Adult${adults > 1 ? 's' : ''} - ${rooms} Room${rooms > 1 ? 's' : ''}`);
-        setOpen(false);
-      };
+    const updateOccupancy = () => {
+      setOccupancy(`${adults} Adult${adults > 1 ? 's' : ''} - ${rooms} Room${rooms > 1 ? 's' : ''}`);
+      setOpen(false);
+    };
     
-      const handleOpenChange = (newOpen: boolean) => {
-        setOpen(newOpen);
-      };
+    const handleOpenChange = (newOpen: boolean) => {
+      setOpen(newOpen);
+    };
   
     const PopoverContent = () => {
       return (

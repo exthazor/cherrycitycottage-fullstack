@@ -26,8 +26,8 @@ export const Carousel = () => {
     <Image
         src={carouselImages[index]?.src ?? ''}
         alt={carouselImages[index]?.alt ?? ''}
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{objectFit:"cover"}}
         priority={true}
     />
     </div>
