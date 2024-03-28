@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-range-start
+  .ant-picker-cell-inner {
+  background-color: rgb(124 45 18) !important;
+  text-transform: capitalize;
+}
+
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-range-end
+  .ant-picker-cell-inner {
+  background-color: rgb(124 45 18) !important;
+  text-transform: capitalize;
+}
+
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border-color: rgb(124 45 18) !important;
+  text-transform: capitalize;
+}
+
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before,
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-in-range::before,
+.createDateRangePicker
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before,
+.createDateRangePicker
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
+  background: rgb(124 45 18) !important;
+  text-transform: capitalize;
+}
+
+.createDateRangePicker .ant-btn-primary {
+  background-color: rgb(124 45 18) !important;
+  border-color: rgb(124 45 18) !important;
+}
+
+@media (max-width: 576px) {
+  .ant-picker-panels {
+    flex-direction: column !important;
+  }
+}
