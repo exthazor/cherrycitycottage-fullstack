@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import React from 'react';
 import { Select } from 'antd';
-import Carousel from "../components/Carousel";
-const { Option } = Select;
+import Image from 'next/image';
 import { actionTypes } from '~/utils/actionTypes';
+import Carousel from './Carousel';
+
+const { Option } = Select;
 
 interface RoomData {
   name: string;
@@ -10,15 +12,7 @@ interface RoomData {
   price: number;
   capacity: number;
   images: string[];
-}
-
-interface RoomData {
-  name: string;
-  description: string;
-  price: number;
-  capacity: number; // This could be renamed to reflect its actual use, like totalAvailableRooms
-  images: string[];
-  totalRooms: number; // Total available rooms of this type
+  totalRooms: number;
 }
 
 interface RoomSectionProps {
@@ -27,46 +21,42 @@ interface RoomSectionProps {
   dispatch: any;
 }
 
-const RoomSection: FC<RoomSectionProps> = ({ roomData, roomCount, dispatch }) => {
-    const { name, description, price, totalRooms, images } = roomData;
+const RoomSection: React.FC<RoomSectionProps> = ({ roomData, roomCount, dispatch }) => {
+    const { name, description, price, capacity, images, totalRooms } = roomData;
+
+    const updateRoomCount = (value: number) => {
+      dispatch({
+        type: actionTypes.UPDATE_ROOM_COUNT,
+        payload: { roomType: name, count: value },
+      });
+    };
+
+
     return (
-      <div className="flex flex-col mb-10 items-center w-2/3 mx-auto">
-        <Carousel images={images.map((imageUrl) => ({
-          src: imageUrl,
-          height: 600,
-          width: 800,
-          alt: name,
-        }))} />
-        <div className="flex-grow mt-5">
-          <h2 className="text-gray-900 md:text-xl md:title-font font-medium mb-3 text-center">
-            {name} - Breakfast Included
-          </h2>
-          <p className="leading-relaxed md:text-base text-center text-sm">
-            {description}
-          </p>
-          <div className="flex flex-row md:mt-6">
-            <div className="flex flex-col">
-              <p className="md:text-base text-sm">Number of rooms</p>
-              <Select
-                style={{ width: 110 }}
-                bordered={false}
-                value={roomCount}
-                onChange={(value: number) => {
-                  dispatch({
-                    type: actionTypes.UPDATE_ROOM_COUNT,
-                    payload: { roomType: name, count: value },
-                  });
-                }}
-              >
-                {Array.from({ length: totalRooms }, (_, i) => (
-                  <Option key={i + 1} value={i + 1}>{i + 1}</Option>
-                ))}
-              </Select>
-            </div>
-            <p className="ml-auto my-3 md:text-base text-sm">₹{price}</p>
+      <>
+      <div className="room-section-container flex flex-row justify-between items-center bg-white overflow-hidden m-4">
+        {/* Display the first image as a representative; adjust as needed */}
+        <div className="carousel-container flex-none w-full md:w-1/2 h-64 relative mb-4">
+          {images && images[0] && (
+          <Carousel images={images.map(image => ({ src: image, alt: name, height: 250, width: 333 }))} />
+          )}
+        </div>
+        <div className="room-details">
+          <h3>{name} - Breakfast Included</h3>
+          <p>{description}</p>
+          <div className="room-selection">
+            <Select defaultValue={roomCount} onChange={updateRoomCount}>
+              {Array.from({ length: totalRooms }, (_, index) => (
+                <Option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </Option>
+              ))}
+            </Select>
+            <p>Total Price: ₹{price * roomCount}</p>
           </div>
         </div>
       </div>
+      </>
     );
 };
 

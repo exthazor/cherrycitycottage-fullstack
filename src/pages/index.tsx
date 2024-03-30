@@ -32,7 +32,10 @@ export default function Home(props: any) {
       <div className="inline-grid justify-items-center">
         
         <div className="col-span-full row-span-full h-[100vh] w-[100v1]">
+        <div className="relative h-[100vh] w-[100vw] overflow-hidden">
+
            <Carousel images={carouselImages}/>
+           </div>
         </div>
         <div className="-mb-70 mt-80 transform col-span-full row-span-full lg:mt-60 xl:mt-50 2xl:mt-40">
   <div className="flex flex-col items-center">
