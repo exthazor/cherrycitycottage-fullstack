@@ -43,8 +43,8 @@ export default function Rooms(props: any) {
                 totalPrice: 0, 
                 totalRooms: 0, // number of rooms available 
                 images: [
-                "https://example.com/standard1.jpg",
-                "https://example.com/standard2.jpg",
+                "/images/hotel/rooms/standard/standard_1.jpg",
+                "/images/hotel/rooms/standard/standard_2.jpg",
             ], 
             description: "Standard Room Description", 
             amenities: ["TV", "AC", "WIFI", "Breakfast"] 
@@ -56,8 +56,8 @@ export default function Rooms(props: any) {
                 totalPrice: 0,
                 totalRooms: 0, // number of rooms available 
                 images: [
-                    "https://example.com/standard1.jpg",
-                    "https://example.com/standard2.jpg",
+                    "/images/hotel/rooms/deluxe/deluxe_1.jpg",
+                    "/images/hotel/rooms/deluxe/deluxe_2.jpg",
                 ], 
                 description: "Deluxe Room Description", 
                 amenities: ["TV", "AC", "WIFI", "Breakfast"] 
@@ -69,8 +69,8 @@ export default function Rooms(props: any) {
                 totalPrice: 0,
                 totalRooms: 0, // number of rooms available 
                 images: [
-                    "https://example.com/standard1.jpg",
-                    "https://example.com/standard2.jpg",
+                    "/images/hotel/rooms/kitchen/kitchen_1.jpg",
+                    "/images/hotel/rooms/kitchen/kitchen_2.jpg",
                   ], 
                   description: "Kitchen Room Description", 
                   amenities: ["TV", "AC", "WIFI", "Breakfast"] 
@@ -82,8 +82,8 @@ export default function Rooms(props: any) {
                 totalRooms: 0, // number of rooms available 
                 totalPrice: 0,
                 images: [
-                    "https://example.com/standard1.jpg",
-                    "https://example.com/standard2.jpg",
+                    "/images/hotel/rooms/triple/triple_1.jpg",
+                    "/images/hotel/rooms/triple/triple_2.jpg",
                     ], 
                     description: "Triple Room Description", 
                     amenities: ["TV", "AC", "WIFI", "Breakfast"] 
