@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 const prisma = new PrismaClient();
 
@@ -14,45 +15,78 @@ export const roomsRouter = createTRPCRouter({
       promoCode: z.string().optional(),
     }))
     .query(async ({ input }) => {
-        const { checkinDate, checkoutDate } = input;
+      const { checkinDate, checkoutDate, noOfGuests, noOfRooms } = input;
+      const startDate = new Date(checkinDate);
+      const endDate = new Date(checkoutDate);
 
-    // Find reservations that overlap with the given date range
-    const overlappingReservations = await prisma.reservation.findMany({
-      where: {
-        OR: [
-          {
-            startDate: {
-              lte: new Date(checkinDate),
-            },
-            endDate: {
-              gte: new Date(checkoutDate),
+      if (new Date(checkinDate) >= new Date(checkoutDate)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Check-out date must be after check-in date.",
+        });
+      }  
+  
+      // Find all rooms that are not reserved in the given date range
+      const availableRooms = await prisma.room.findMany({
+        where: {
+          reservations: {
+            none: {
+              OR: [
+                {
+                  startDate: {
+                    lt: endDate,
+                  },
+                },
+                {
+                  endDate: {
+                    gt: startDate,
+                  },
+                },
+              ],
             },
           },
-        ],
-      },
-      select: {
-        roomTypeId: true,
-      },
-    });
-
-    const unavailableRoomTypeIds = overlappingReservations.map(reservation => reservation.roomTypeId);
-
-    // Find room types excluding the ones with overlapping reservations
-    const availableRoomTypes = await prisma.roomType.findMany({
-      where: {
-        NOT: {
-          id: {
-            in: unavailableRoomTypeIds,
-          },
+          AND: {
+            isAvailable: true,
+          }
         },
-      },
-      include: {
-        rooms: true, // Adjust according to the details you need
-      },
-    });
+        include: {
+          roomType: true, // Include room type to get capacity and other details
+        },
+      });
 
-    // Optionally, you can further process availableRoomTypes to match your exact frontend needs
+      // Query to get information about all room types, their prices, and capacities
+      const roomTypes = await prisma.roomType.findMany({
+        select: {
+          name: true,
+          capacity: true,
+          price: true,
+        },
+        orderBy: {
+          price: "asc",
+        }
+      });
 
-    return { availableRoomTypes };
-  },
-    )})
+      const roomCountsByType: { [key: string]: { count: number, roomType: any } } = availableRooms.reduce((acc, room) => {
+        const { roomType } = room;
+        if (!acc[roomType.name]) {
+          acc[roomType.name] = { count: 0, roomType: room.roomType };
+        }
+        acc[roomType.name]!!.count += 1;
+        return acc;
+      }, {} as { [key: string]: { count: number, roomType: any } });
+      
+
+      const response = {
+        availableRooms: Object.values(roomCountsByType).map(({ count, roomType }) => ({
+          id: roomType.id, // This will need adjustment as id might not be directly available
+          roomType: roomType.name,
+          capacity: roomType.capacity,
+          price: roomType.price,
+          count: count,
+        })),
+        roomTypes: roomTypes,
+      };
+      
+      return response;
+    })
+})

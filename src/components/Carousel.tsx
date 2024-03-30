@@ -1,35 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-const carouselImages = [
-  { src: '/images/hotel/carousel/aerial-view.jpg', height: 600, width: 800, alt: 'Aerial View' },
-  { src: '/images/hotel/carousel/flower-pot.jpg', height: 600, width: 800, alt: 'Flower Pot' },
-  { src: '/images/hotel/carousel/garden.jpg', height: 600, width: 800, alt: 'Garden' },
-  { src: '/images/hotel/carousel/reception.jpg', height: 600, width: 800, alt: 'Reception' },
-  { src: '/images/hotel/carousel/restaurant.jpg', height: 600, width: 800, alt: 'Restaurant' },
-  { src: '/images/hotel/carousel/terrace.jpg', height: 600, width: 800, alt: 'Terrace' }
-];
+// Define the props interface to type-check the props passed to the component
+interface CarouselProps {
+  images: {
+    src: string;
+    height: number;
+    width: number;
+    alt?: string;
+  }[];
+}
 
-export const Carousel = () => {
+export const Carousel: React.FC<CarouselProps> = ({ images }) => {
   const [index, setIndex] = useState(0);
 
-  const nextImage = () => setIndex((currentIndex) => (currentIndex + 1) % carouselImages.length);
-  const prevImage = () => setIndex((currentIndex) => (currentIndex - 1 + carouselImages.length) % carouselImages.length);
+  const nextImage = () => setIndex((currentIndex) => (currentIndex + 1) % images.length);
+  const prevImage = () => setIndex((currentIndex) => (currentIndex - 1 + images.length) % images.length);
 
   useEffect(() => {
     const interval = setInterval(nextImage, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
+
+  if (images.length === 0) {
+    return null; // Or return a default image or placeholder
+  }
 
   return (
-    <div className="relative h-[100vh] w-[100vw]">
-    <Image
-        src={carouselImages[index]?.src ?? ''}
-        alt={carouselImages[index]?.alt ?? ''}
-        fill
-        style={{objectFit:"cover"}}
-        priority={true}
-    />
+    <div className="relative h-[600px] w-[800px] overflow-hidden">
+      {images.map((image, imageIndex) => (
+        <div
+          key={image.src}
+          className={`absolute transition-opacity duration-500 ease-in-out ${index === imageIndex ? 'opacity-100' : 'opacity-0'}`}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt ?? ''}
+            layout="fill"
+            objectFit="cover"
+            priority={index === imageIndex}
+          />
+        </div>
+      ))}
+      {/* Navigation buttons if needed */}
+      <button onClick={prevImage} className="absolute left-0 top-1/2 transform -translate-y-1/2">
+        Prev
+      </button>
+      <button onClick={nextImage} className="absolute right-0 top-1/2 transform -translate-y-1/2">
+        Next
+      </button>
     </div>
   );
 };

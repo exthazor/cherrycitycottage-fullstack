@@ -225,7 +225,7 @@ export function HomeNavbar() {
                   <hr className="my-5 h-px bg-black border-0" />
                 </div>
                 <div className="mx-auto">
-                <Link href={{ pathname: "/rooms"}}>
+                <Link href={{ pathname: "/rooms", query: { startDate: startDate.toString(), endDate: endDate.toString(), adults, rooms, promoCode }}}>
                   <button
                     className="text-white inline-flex items-center bg-orange-900 border-0 py-5 px-7 focus:outline-none hover:bg-neutral-800 text-base mt-4 md:mt-5"
                   >

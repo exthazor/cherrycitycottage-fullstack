@@ -86,7 +86,7 @@ export const SearchBar = () => {
             />
           </div>
         </div>
-        <Link href={{ pathname: "/rooms"}}>
+        <Link href={{ pathname: "/rooms", query: { startDate: startDate.toString(), endDate: endDate.toString(), noOfGuests, noOfRooms, promoCode }}}>
           <button
             className="text-white inline-flex items-center bg-orange-900 border-0 py-5 px-7 focus:outline-none hover:bg-neutral-800 text-base mt-4 md:mt-5"
           >
