@@ -27,7 +27,7 @@ export const Carousel: React.FC<CarouselProps> = ({ images }) => {
   }
 
   return (
-    <div className="relative h-[600px] w-[800px] overflow-hidden">
+    <div className="relative h-[100vh] w-[100vw] overflow-hidden">
       {images.map((image, imageIndex) => (
         <div
           key={image.src}

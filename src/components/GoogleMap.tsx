@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-const Circle = require("../images/red-circle-icon.svg")
 import {
     useJsApiLoader,
     GoogleMap,
@@ -39,7 +38,7 @@ export const GoogleMapComponent = () => {
             ["Airport", "34.8 kms", "Guwahati Airport (GAU), Borjhar, Guwahati, Assam, India"],
         ],
     }
-    
+    const roomIconSrc = '/images/misc/red-circle-icon.svg';
     const [restaurantColor, setRestaurantColor] = useState("red");
     const [shoppingColor, setShoppingColor] = useState("black");
     const [touristColor, setTouristColor] = useState("black");
@@ -154,7 +153,7 @@ export const GoogleMapComponent = () => {
             <div className="md:border flex flex-col">
                 <div className="flex flex-col md:mx-5 md:my-5 my-2">
                     <div className="flex flex-row md:my-4">
-                        <Image src={Circle} alt="circle" height={20} width={20} className="md:ml-1 md:w-5 w-0"/>
+                        <Image src={roomIconSrc} alt="circle" height={20} width={20} className="md:ml-1 md:w-5 w-0"/>
                         <p className="mx-5 font-bold text-base invisible md:visible">
                             Cherry City Cottage
                         </p>

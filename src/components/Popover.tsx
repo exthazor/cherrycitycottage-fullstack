@@ -10,8 +10,6 @@ interface PopoverContentProps {
 
   import React from 'react';
   import Image from 'next/image';
-  import Room from '../images/room.svg';
-  import People from '../images/people.svg';
   
   const PopoverContent: React.FC<PopoverContentProps> = ({
     rooms,
@@ -22,12 +20,14 @@ interface PopoverContentProps {
     removeAdults,
     updateOccupancy
   }) => {
+    const roomImage = "/images/navbar/room.svg"
+    const peopleImage = "/images/navbar/people.svg"
     return (
         <div className="p-3 w-full flex flex-col">
           <div className="flex flex-col">
             <div className="p-2 flex space-x-20 justify-between items-center ">
               <div className="flex text-sm items-center space-x-2">
-                <Image src={Room} alt="Room" width={20} height={20} />
+                <Image src={roomImage} alt="Room" width={20} height={20} />
                 <p>Rooms</p>
               </div>
               <div className="flex space-x-4 border p-2">
@@ -38,7 +38,7 @@ interface PopoverContentProps {
             </div>
             <div className="p-2 flex justify-between items-center">
               <div className="flex text-sm items-center space-x-2">
-                <Image src={People} alt="People" width={20} height={20} />
+                <Image src={peopleImage} alt="People" width={20} height={20} />
                 <p>Adults</p>
               </div>
               <div className="flex space-x-4 border p-2">

@@ -1,29 +1,29 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import BookingForm from "~/components/BookingForm";
-import Navbar from "../components/Navbar";
-import RoomSection from "~/components/RoomSection";
 import { actionTypes } from "~/utils/actionTypes";
 import { trpc } from '~/utils/trpc';
 import { isValidEmail } from "~/utils/validators";
-import { roomTypes } from "~/utils/roomTypes";
-// import { fetcher, sender } from "../services/request"
-import useSWR from 'swr'
 import moment from "moment";
-import { State, Action } from "~/server/types"
+import Loader from "~/components/Loader";
 import OPGoogleMap from "~/components/GoogleMap";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-// import { calculateRoomNo, isValidEmail } from "../services/utils";
-
-const router: any = useRouter()
 
 export default function Rooms(props: any) {
 
+  const Navbar = dynamic(async () => await import('../components/Navbar'), {
+    ssr: false,
+  })
+  const RoomSection = dynamic(async () => await import('../components/RoomSection'), {
+    ssr: false,
+  })
+  const router: any = useRouter()
   const { startDate, endDate, noOfGuests, noOfRooms, promoCode } = router.query;
 
 // Fetch available rooms
-  const { data: rooms, error: availableRoomsError, isLoading: isAvailableRoomsLoading } = trpc.room.findAvailableRooms.useQuery({
+  const { data: rooms, error, isLoading } = trpc.room.findAvailableRooms.useQuery({
     checkinDate: startDate as string,
     checkoutDate: endDate as string,
     noOfGuests: Number(noOfGuests),
@@ -33,7 +33,20 @@ export default function Rooms(props: any) {
     enabled: Boolean(startDate && endDate && noOfGuests && noOfRooms),
   });
   
+  // Handling loading state
+  if (isLoading) {
+    return <Loader/>;
+  }
 
+  // Handling error state
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  // Ensure rooms and rooms.availableRooms are defined before accessing
+  if (!rooms || !rooms.availableRooms) {
+    return <div>No data available</div>;
+  }
     const initialState = {
         roomsData: {
             "Standard Room": { 
@@ -123,7 +136,7 @@ export default function Rooms(props: any) {
         case actionTypes.UPDATE_ROOM_COUNT: {
           // Extracts roomType and count from action.payload
           const { roomType, count } = action.payload;
-          const pricePerRoom = state.roomsData[roomType].price;
+          const pricePerRoom = state.roomsData[roomType]?.price ?? 0;
           const totalPrice = pricePerRoom * count;
           return {
             ...state,
@@ -202,7 +215,6 @@ export default function Rooms(props: any) {
           return state;
       }
   };
-  
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
